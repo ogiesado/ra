@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  server:
+    build:
+      context: .
+    ports:
+      - 8081:3000
+    volumes:
+     - ./:/app
+    environment:
+      MONGODB_ADMINUSERNAME: root
+      MONGODB_ADMINPASSWORD: example
+      MONGODB_URL: mongodb://root:example@mongo:27017/
+    command: npm start
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+     - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+     - mongodb:/data/db
+     - mongodb_config:/data/configdb
+volumes:
+  mongodb:
+  mongodb_config:
+ 
