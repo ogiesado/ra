@@ -1,39 +1,30 @@
-import { Schema, Types, model } from 'mongoose';
-import { faker } from '@faker-js/faker';
+import { Schema, model } from 'mongoose';
+import { CurrencyCode, getCurrencyCodes } from '../utils/currency';
 
-export enum CURRENCY_TYPES {
-  USD = 'USD',
-  ETH = 'ETH',
-  BTC = 'BTC',
-}
+export type CONVERSION_TYPE = 'Live Price' | 'Exchanged';
 
-export enum CONVERSION_TYPES {
-  LIVE = 'LIVE',
-  EXCHANGED = 'EXCHANGED',
-}
-
-export interface IConversion {
-  id: Types.ObjectId;
-  fromCurrency: CURRENCY_TYPES;
-  toCurrency: CURRENCY_TYPES;
-  fromAmount: string;
-  toAmount: string;
-  rate: string;
-  type: CONVERSION_TYPES;
+export interface Conversion {
+  id: string;
+  fromCurrency: CurrencyCode;
+  toCurrency: CurrencyCode;
+  fromAmount: number;
+  toAmount: number;
+  rate: number;
+  type: CONVERSION_TYPE;
 }
 
 export const currencyField = {
   type: String,
-  enum: Object.values(CURRENCY_TYPES),
+  enum: Object.values(getCurrencyCodes()),
   required: true,
 };
 
 export const amountField = {
   required: true,
-  type: String,
+  type: Number,
 };
 
-const conversionSchema = new Schema<IConversion>(
+const conversionSchema = new Schema<Conversion & { toApi: () => Conversion }>(
   {
     fromCurrency: currencyField,
     toCurrency: currencyField,
@@ -43,30 +34,64 @@ const conversionSchema = new Schema<IConversion>(
     type: {
       type: String,
       required: true,
-      enum: Object.values(CONVERSION_TYPES),
+      enum: ['Live Price', 'Exchanged'],
     },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    methods: {
+      toApi() {
+        return {
+          id: this._id.toString(),
+          fromCurrency: this.fromCurrency,
+          toCurrency: this.toCurrency,
+          fromAmount: this.fromAmount,
+          toAmount: this.toAmount,
+          rate: this.rate,
+          type: this.type,
+        };
+      },
+    },
+  }
 );
 
-const Conversion = model('Conversion', conversionSchema);
+const ConversionModel = model('Conversion', conversionSchema);
 
-export const seedConversions = async (number = 1) => {
-  let count = 0;
+export const createConversion = async (
+  fromCurrency: CurrencyCode,
+  toCurrency: CurrencyCode,
+  fromAmount: number,
+  toAmount: number,
+  rate: number,
+  type: CONVERSION_TYPE
+) => {
+  const conversion = new ConversionModel({
+    fromCurrency,
+    toCurrency,
+    toAmount,
+    fromAmount,
+    rate,
+    type,
+  });
 
-  while (count < number) {
-    const conversion = new Conversion({
-      fromCurrency: faker.helpers.arrayElement(Object.values(CURRENCY_TYPES)),
-      toCurrency: faker.helpers.arrayElement(Object.values(CURRENCY_TYPES)),
-      toAmount: faker.finance.amount(),
-      fromAmount: faker.finance.amount(),
-      rate: faker.finance.amount(),
-      type: faker.helpers.arrayElement(Object.values(CONVERSION_TYPES)),
-    });
+  await conversion.save();
 
-    await conversion.save();
-    count++;
-  }
+  return conversion;
 };
 
-export default Conversion;
+export const createLivePriceConversion = async (
+  fromCurrency: CurrencyCode,
+  toCurrency: CurrencyCode,
+  rate: number
+) => {
+  return createConversion(
+    fromCurrency,
+    toCurrency,
+    1,
+    rate,
+    rate,
+    'Live Price'
+  );
+};
+
+export default ConversionModel;

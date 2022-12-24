@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --exec ts-node src/index.ts",
     "build": "docker-compose build",
-    "up": "docker-compose up",
+    "up": "docker-compose  --env-file .env up",
     "docker-build": "docker build -t redacre-server .",
     "docker-run": "docker run --name redacre-server -p 8081:3000 redacre-server",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dinero.js": "^1.9.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^6.8.1",
@@ -25,7 +26,9 @@
   "devDependencies": {
     "@faker-js/faker": "^7.6.0",
     "@types/cors": "^2.8.13",
+    "@types/dinero.js": "^1.9.0",
     "@types/express": "^4.17.15",
+    "@types/node": "^18.11.17",
     "@types/uuid": "^9.0.0",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.1"

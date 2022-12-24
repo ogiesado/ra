@@ -2,9 +2,13 @@ import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { connectDb, seedConversions } from './models';
+import { connectDb } from './models';
+import { startRateUpdates } from './services';
+import { getCryptoCurrencies } from './utils/currency';
 
-const PORT = process.env.PORT;
+const SERVER_PORT = process.env.SERVER_PORT;
+const RATES_UPDATE_INTERVAL_IN_SECONDS =
+  Number(process.env.RATES_UPDATE_INTERVAL_IN_SECONDS as string) || 60;
 
 const app = express();
 
@@ -13,10 +17,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 connectDb().then(async () => {
-  app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
-  seedConversions(5);
+  await startRateUpdates(
+    getCryptoCurrencies(),
+    RATES_UPDATE_INTERVAL_IN_SECONDS
+  );
+
+  app.listen(SERVER_PORT, () =>
+    console.log(`Server running on port: ${SERVER_PORT}`)
+  );
 });
 
 app.get('/', (req, res) => {
-  res.send('Hello Ogie Sado !' + uuidv4());
+  res.send('Hello Ogie! ' + uuidv4());
 });
