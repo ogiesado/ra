@@ -1,4 +1,4 @@
-import { Conversion, createLivePriceConversion } from '../models';
+import { createLivePriceConversion } from '../models';
 import { Currency, CurrencyCode } from '../utils/currency';
 
 export type Rates = {
@@ -15,12 +15,14 @@ const fetchCurrencyRates = async (currencyCode: CurrencyCode = 'USD') => {
   return data.rates as Rates;
 };
 
+/**
+ * Uses the API to get the rates for each base currency in the toCurrency
+ */
 export const updateRates = async (
   baseCurrencies: Currency[],
-  toCurrencyCode: CurrencyCode = 'USD'
+  toCurrencyCode: CurrencyCode = 'USD',
+  onUpdate?: (data: any) => void
 ) => {
-  const updates: Conversion[] = [];
-
   for (let baseCurrency of baseCurrencies) {
     const baseCurrencyCode = baseCurrency.code;
 
@@ -35,23 +37,38 @@ export const updateRates = async (
         rate
       );
 
-      updates.push(conversion.toApi());
+      const data = conversion.toApi(); // convert the model to the API format
+
+      if (onUpdate) {
+        // notify if on update is requested
+        onUpdate(data);
+      }
     }
   }
-
-  return updates;
 };
 
+/**
+ * Starts updating currency rates by calling itself again after the interval
+ */
 export const startRateUpdates = async (
   baseCurrencies: Currency[],
-  updateIntervalInSeconds: number = 60
+  destinationCurrencies: Currency[],
+  updateIntervalInSeconds: number = 60,
+  onUpdate?: (data: any) => void
 ) => {
-  const updates = await updateRates(baseCurrencies);
+  // for each destination currency in this case (fiats) we get the rates in the base currencies (crypto) currencies
+  for (let { code: toCurrencyCode } of destinationCurrencies) {
+    await updateRates(baseCurrencies, toCurrencyCode, onUpdate);
+  }
 
   setTimeout(
-    () => startRateUpdates(baseCurrencies, updateIntervalInSeconds),
+    () =>
+      startRateUpdates(
+        baseCurrencies,
+        destinationCurrencies,
+        updateIntervalInSeconds,
+        onUpdate
+      ),
     updateIntervalInSeconds * 1000
   );
-
-  console.log('updates ', updates);
 };

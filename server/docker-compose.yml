@@ -11,6 +11,8 @@ services:
       - ${HOST_PORT}:${SERVER_PORT}
     volumes:
       - ./:/app
+    env_file:
+      - .env
     environment:
       MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}

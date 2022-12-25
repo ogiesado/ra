@@ -1,4 +1,4 @@
-export type CurrencyCode = 'BTC' | 'ETH' | 'USD';
+export type CurrencyCode = 'BTC' | 'ETH' | 'GBP' | 'USD';
 
 export interface Currency {
   name: string;
@@ -6,10 +6,14 @@ export interface Currency {
   code: CurrencyCode;
 }
 
+/**
+ * Supported currencies
+ */
 const currencies: Currency[] = [
   { name: 'Bitcoin', type: 'crypto', code: 'BTC' },
   { name: 'Ethereum', type: 'crypto', code: 'ETH' },
   { name: 'US Dollars', type: 'fiat', code: 'USD' },
+  { name: 'British Pounds', type: 'fiat', code: 'GBP' },
 ];
 
 export const getCurrencies = () => {
