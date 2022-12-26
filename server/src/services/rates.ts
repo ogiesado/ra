@@ -37,11 +37,9 @@ export const updateRates = async (
         rate
       );
 
-      const data = conversion.toApi(); // convert the model to the API format
-
       if (onUpdate) {
         // notify if on update is requested
-        onUpdate(data);
+        onUpdate(conversion);
       }
     }
   }

@@ -1,10 +1,12 @@
 import cors from 'cors';
 import express from 'express';
 import { connectDb } from './models';
+import * as routes from './routes';
 import { startRateUpdates } from './services';
 import { getCryptoCurrencies, getFiatCurrencies } from './utils/currency';
 import { upgradeWebSocketConnection, websocketBroadcast } from './ws';
 
+const HOST_PORT = process.env.HOST_PORT;
 const SERVER_PORT = process.env.SERVER_PORT;
 const RATES_UPDATE_INTERVAL_IN_SECONDS =
   Number(process.env.RATES_UPDATE_INTERVAL_IN_SECONDS as string) || 60;
@@ -16,6 +18,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// setup route handlers
+app.use('/conversions', routes.conversions);
 
 // connect to the database
 connectDb().then(async () => {
@@ -30,12 +35,8 @@ connectDb().then(async () => {
   app
     // then start listening for incoming connections
     .listen(SERVER_PORT, () =>
-      console.log(`Server running on port: ${SERVER_PORT}`)
+      console.log(`Server running on the host port: ${HOST_PORT}`)
     )
     // handle upgrading to ws requests
     .on('upgrade', upgradeWebSocketConnection);
-});
-
-app.get('/', (req, res) => {
-  res.send('Hello Ogie! ');
 });
