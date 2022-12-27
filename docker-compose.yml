@@ -5,27 +5,35 @@ services:
     depends_on:
       - mongo
     image: ra-server
-    build:
-      context: .
+    build: ./server
     ports:
       - ${HOST_PORT}:${SERVER_PORT}
     volumes:
-      - ./:/app
+      - ./server:/app
     env_file:
       - .env
     environment:
       MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
     command: npm start
+  client:
+    depends_on:
+      - server
+    image: ra-client
+    build: ./client
+    ports:
+      - 8082:8082
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: npm run dev
   mongo:
     image: mongo
+    container_name: mongo
     restart: always
     ports:
-     - ${MONGODB_HOST_PORT}:${MONGODB_PORT}
+     - 27017:27017
     volumes:
-     - mongodb:/data/db
-     - mongodb_config:/data/configdb
-volumes:
-  mongodb:
-  mongodb_config:
+     - ./mongodb/data:/data/db
+     - ./mongodb/config:/data/configdb
  
