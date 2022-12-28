@@ -162,3 +162,31 @@ export const getPaginatedConversions = async (
     data,
   };
 };
+
+export const getLatestLiveConversionRates = async (
+  baseCurrencyCodes: CurrencyCode[],
+  destinationCurrencyCodes: CurrencyCode[]
+) => {
+  const rates: Partial<Record<`${CurrencyCode}:${CurrencyCode}`, number>> = {};
+
+  for (const fromCurrency of baseCurrencyCodes) {
+    for (const toCurrency of destinationCurrencyCodes) {
+      const conversion = await ConversionModel.findOne(
+        { type: 'Live Price', fromCurrency, toCurrency },
+        {},
+        {
+          sort: {
+            createdAt: -1,
+          },
+        }
+      );
+
+      if (conversion) {
+        rates[`${conversion.fromCurrency}:${conversion.toCurrency}`] =
+          conversion.rate;
+      }
+    }
+  }
+
+  return rates;
+};

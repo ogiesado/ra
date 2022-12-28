@@ -9,7 +9,7 @@ import { getCurrencyCodes, makeCurrencyConverter } from '../utils';
 export const conversions = Router();
 
 /**
- * Handle the request to gets conversions
+ * Handle the request to get conversions
  */
 conversions.get('/', async (req, res) => {
   const page = Number(req.query.page) || undefined;

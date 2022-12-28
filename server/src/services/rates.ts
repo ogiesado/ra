@@ -54,7 +54,7 @@ export const startRateUpdates = async (
   updateIntervalInSeconds: number = 60,
   onUpdate?: (data: any) => void
 ) => {
-  // for each destination currency in this case (fiats) we get the rates in the base currencies (crypto) currencies
+  // for each destination (fiat) currency in this case we get the rates in the base (crypto) currencies currencies
   for (let { code: toCurrencyCode } of destinationCurrencies) {
     await updateRates(baseCurrencies, toCurrencyCode, onUpdate);
   }
