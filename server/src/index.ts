@@ -20,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // setup route handlers
+app.use('/init', routes.init);
 app.use('/conversions', routes.conversions);
 
 // connect to the database
