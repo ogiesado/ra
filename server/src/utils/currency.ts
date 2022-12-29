@@ -69,17 +69,30 @@ export const makeCurrencyConverter = ({
     }
 
     if (currencyCode === fromCurrencyCode) {
+      console.log(11);
       const value = currency(amount, {
         precision: getCurrencyPrecision(toCurrencyCode),
-      })
-        .multiply(toAmount)
-        .divide(fromAmount).value;
+      }).multiply(toAmount).value;
 
       const rate = currency(1, {
         precision: getCurrencyPrecision(toCurrencyCode),
-      })
-        .multiply(toAmount)
-        .divide(fromAmount).value;
+      }).divide(toAmount).value;
+
+      return {
+        currencyCode: toCurrencyCode,
+        value,
+        rate,
+      };
+    }
+
+    if (currencyCode === toCurrencyCode) {
+      const value = currency(amount, {
+        precision: getCurrencyPrecision(toCurrencyCode),
+      }).divide(toAmount).value;
+
+      const rate = currency(1, {
+        precision: getCurrencyPrecision(toCurrencyCode),
+      }).multiply(toAmount).value;
 
       return {
         currencyCode: toCurrencyCode,
@@ -89,19 +102,19 @@ export const makeCurrencyConverter = ({
     }
 
     const value = currency(amount, {
-      precision: getCurrencyPrecision(fromCurrencyCode),
+      precision: getCurrencyPrecision(toCurrencyCode),
     })
-      .multiply(fromAmount)
-      .divide(toAmount).value;
+      .multiply(toAmount)
+      .divide(fromAmount).value;
 
     const rate = currency(1, {
-      precision: getCurrencyPrecision(fromCurrencyCode),
+      precision: getCurrencyPrecision(toCurrencyCode),
     })
-      .multiply(fromAmount)
-      .divide(toAmount).value;
+      .multiply(toAmount)
+      .divide(fromAmount).value;
 
     return {
-      currencyCode: fromCurrencyCode,
+      currencyCode: toCurrencyCode,
       value,
       rate,
     };
