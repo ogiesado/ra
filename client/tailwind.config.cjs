@@ -10,6 +10,9 @@ module.exports = {
         'ra-bg-1': '#EEEEEE',
         'ra-green': '#49CD5E',
       },
+      height: {
+        'ra-234-px': '234px',
+      },
     },
   },
   plugins: [],

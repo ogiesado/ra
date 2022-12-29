@@ -14,7 +14,7 @@ export const AmountField = ({
   onChange: (value: string) => void;
 }) => {
   return (
-    <div className={`amount-field flex flex-col ${className}`}>
+    <div className={`flex flex-col w-full lg:w-auto mb-4 lg:mb-0 ${className}`}>
       <label className="text-sm font-normal text-ra-text">{label}</label>
       <input
         disabled={disabled}

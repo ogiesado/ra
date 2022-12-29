@@ -15,7 +15,7 @@ function App() {
   if (loading) return <FeedbackMessage success message="Loading..." />;
 
   return (
-    <header style={{ height: 234 }} className="shadow-md pt-16 relative">
+    <header className="lg:h-ra-234-px lg:shadow-md pt-16 relative px-4">
       {message && (
         <FeedbackMessage success={messageSuccess} message={message} />
       )}

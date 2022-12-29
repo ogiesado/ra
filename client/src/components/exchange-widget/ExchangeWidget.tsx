@@ -29,7 +29,7 @@ export const ExchangeWidget = ({
   } = useExchangeWidget(rates, fromCurrencies, toCurrencies, onExchange);
 
   return (
-    <div className="flex items-end">
+    <div className="flex flex-col items-start lg:flex-row lg:items-end ">
       <SelectField
         fields={fromCurrencies}
         label="Currency from"
@@ -63,7 +63,7 @@ export const ExchangeWidget = ({
       <button
         disabled={disableSaveButton || disableWidget}
         style={{ minWidth: 84, height: 40 }}
-        className="bg-ra-green text-white rounded-md disabled:bg-gray-300"
+        className="bg-ra-green text-white rounded-md w-full lg:w-auto disabled:bg-gray-300"
         onClick={onSave}
       >
         Save

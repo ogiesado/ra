@@ -57,7 +57,7 @@ export const SelectField = ({
   return (
     <div
       ref={wrapperRef}
-      className={`relative ${className || ''} `}
+      className={`relative ${className || ''} w-full mb-4 lg:mb-0 lg:w-auto`}
       onKeyDown={handleKeyDown}
     >
       <label className={`text-sm font-normal text-ra-text`}>{label}</label>
