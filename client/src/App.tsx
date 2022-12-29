@@ -1,24 +1,32 @@
-import { ExchangeWidget } from './components';
+import { ExchangeWidget, FeedbackMessage } from './components';
 import { useAppService } from './services';
 
 function App() {
-  const { currencies, rates, loading } = useAppService();
+  const {
+    fiatCurrencies,
+    cryptoCurrencies,
+    rates,
+    loading,
+    message,
+    messageSuccess,
+    showMessage,
+  } = useAppService();
 
-  console.log('rates', rates);
-  console.log('currencies', currencies);
-
-  if (loading)
-    return (
-      <div className="flex items-center justify-center text-2xl font-bold mt-10">
-        <p>Loading...</p>
-      </div>
-    );
+  if (loading) return <FeedbackMessage success message="Loading..." />;
 
   return (
-    <header className="py-10 shadow-md">
+    <header style={{ height: 234 }} className="shadow-md pt-16 relative">
+      {message && (
+        <FeedbackMessage success={messageSuccess} message={message} />
+      )}
       <div className="container mx-auto">
         <h1 className="text-2xl font-bold mb-5">Exchange</h1>
-        <ExchangeWidget />
+        <ExchangeWidget
+          rates={rates}
+          fromCurrencies={fiatCurrencies}
+          toCurrencies={cryptoCurrencies}
+          onExchange={(success, message) => showMessage(message, success, 5)}
+        />
       </div>
     </header>
   );

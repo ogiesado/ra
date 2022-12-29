@@ -14,7 +14,10 @@ export const useRatesService = (initRates: Rate = {}) => {
 
       setRates((rates) => ({
         ...rates,
-        [`${data.fromCurrency}:${data.toCurrency}`]: data.rate,
+        [`${data.fromCurrency}:${data.toCurrency}`]: {
+          id: data.id,
+          value: data.rate,
+        },
       }));
     });
 

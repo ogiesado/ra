@@ -1,7 +1,7 @@
 export interface Conversion {
   id: string;
-  fromCurrency: string;
-  toCurrency: string;
+  fromCurrency: Currency;
+  toCurrency: Currency;
   fromAmount: number;
   toAmount: number;
   rate: number;
@@ -21,14 +21,23 @@ export type Rate = Partial<
     | 'GBP:USD'
     | 'USD:BTC'
     | 'USD:ETH'
-    | 'USD:GBP',
-    number
+    | 'USD:GBP'
+    | 'BTC:BTC'
+    | 'ETH:ETH'
+    | 'GBP:GBP'
+    | 'USD:USD',
+    RateValue
   >
 >;
+
+export type RateValue = {
+  id: string;
+  value: number;
+};
 
 export interface Currency {
   name: string;
   type: 'crypto' | 'fiat';
-  code: string;
+  code: 'BTC' | 'ETH' | 'GBP' | 'USD' | 'ETH';
   precision: number;
 }

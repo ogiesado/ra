@@ -1,15 +1,6 @@
 import { Router } from 'express';
-import {
-  createExchangedConversion,
-  getConversionById,
-  getLatestLiveConversionRates,
-  getPaginatedConversions,
-} from '../models';
-import {
-  getCryptoCurrencyCodes,
-  getCurrencies,
-  getFiatCurrencyCodes,
-} from '../utils';
+import { getLatestLiveConversionRates } from '../models';
+import { getCurrencies, getCurrencyCodes } from '../utils';
 
 export const init = Router();
 
@@ -20,8 +11,8 @@ init.get('/', async (req, res) => {
   const currencies = getCurrencies();
 
   const rates = await getLatestLiveConversionRates(
-    getCryptoCurrencyCodes(),
-    getFiatCurrencyCodes()
+    getCurrencyCodes(),
+    getCurrencyCodes()
   );
 
   return res.send({ rates, currencies });
