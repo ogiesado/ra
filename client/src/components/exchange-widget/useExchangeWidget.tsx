@@ -106,6 +106,7 @@ export const useExchangeWidget = (
 
       setFromAmount('');
       setToAmount('');
+      setRate(null);
     });
   };
 
