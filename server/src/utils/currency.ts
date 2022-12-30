@@ -1,23 +1,34 @@
 import currency from 'currency.js';
 
-export type CurrencyCode = 'BTC' | 'ETH' | 'GBP' | 'USD';
+// export type CurrencyCode = 'BTC' | 'ETH' | 'GBP' | 'USD';
 
-export interface Currency {
-  name: string;
-  type: 'crypto' | 'fiat';
-  code: CurrencyCode;
-  precision: number;
-}
+// export interface Currency {
+//   name: string;
+//   type: 'crypto' | 'fiat';
+//   code: CurrencyCode;
+//   precision: number;
+// }
 
 /**
  * Supported currencies
  */
-const currencies: Currency[] = [
+// const currencies: Currency[] = [
+//   { name: 'Bitcoin', type: 'crypto', code: 'BTC', precision: 8 },
+//   { name: 'Ethereum', type: 'crypto', code: 'ETH', precision: 8 },
+//   { name: 'US Dollars', type: 'fiat', code: 'USD', precision: 2 },
+//   { name: 'British Pounds', type: 'fiat', code: 'GBP', precision: 2 },
+// ];
+
+const currencies = [
   { name: 'Bitcoin', type: 'crypto', code: 'BTC', precision: 8 },
   { name: 'Ethereum', type: 'crypto', code: 'ETH', precision: 8 },
   { name: 'US Dollars', type: 'fiat', code: 'USD', precision: 2 },
   { name: 'British Pounds', type: 'fiat', code: 'GBP', precision: 2 },
-];
+] as const;
+
+export type CurrencyCode = typeof currencies[number]['code'];
+export type CurrencyName = typeof currencies[number]['name'];
+export type Currency = typeof currencies[number];
 
 export const getCurrencies = () => {
   return [...currencies];
@@ -45,6 +56,15 @@ export const getCryptoCurrencyCodes = () => {
 
 export const getCurrencyPrecision = (code: CurrencyCode) => {
   return getCurrencies().find((currency) => currency.code === code)?.precision;
+};
+
+export const getCurrencyNameFromCode = (code: CurrencyCode) => {
+  return getCurrencies().find((currency) => currency.code === code)
+    ?.name as CurrencyName;
+};
+
+export const getCurrencyFromCode = (code: CurrencyCode) => {
+  return getCurrencies().find((currency) => currency.code === code) as Currency;
 };
 
 /**

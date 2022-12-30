@@ -1,20 +1,32 @@
 import { Schema, model, Types } from 'mongoose';
+import currency from 'currency.js';
 import {
   parseConversionSortFields,
   transfromConversionSortFields,
 } from '../utils';
-import { CurrencyCode, getCurrencyCodes } from '../utils/currency';
+import {
+  CurrencyCode,
+  CurrencyName,
+  getCurrencyCodes,
+  getCurrencyFromCode,
+} from '../utils/currency';
 
 export type CONVERSION_TYPE = 'Live Price' | 'Exchanged';
 
 export interface Conversion {
   id: string;
   fromCurrency: CurrencyCode;
+  fromCurrencyName: CurrencyName;
   toCurrency: CurrencyCode;
+  toCurrencyName: CurrencyName;
   fromAmount: number;
+  formattedFromAmount: string;
   toAmount: number;
+  formattedToAmount: string;
   rate: number;
   type: CONVERSION_TYPE;
+  createdAt: string;
+  isExchange: boolean;
 }
 
 const currencyField = {
@@ -45,14 +57,38 @@ const conversionSchema = new Schema<Conversion & { toApi: () => Conversion }>(
     timestamps: true,
     methods: {
       toApi() {
+        const { format } = new Intl.DateTimeFormat('en-GB', {
+          month: 'numeric',
+          day: 'numeric',
+          year: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          hour12: false,
+        });
+
+        const fromCurrency = getCurrencyFromCode(this.fromCurrency);
+        const toCurrency = getCurrencyFromCode(this.toCurrency);
+
         return {
           id: this._id.toString(),
           fromCurrency: this.fromCurrency,
+          fromCurrencyName: fromCurrency.name,
           toCurrency: this.toCurrency,
+          toCurrencyName: toCurrency.name,
           fromAmount: this.fromAmount,
+          formattedFromAmount: currency(this.fromAmount, {
+            symbol: '',
+            precision: fromCurrency.precision,
+          }).format(),
           toAmount: this.toAmount,
+          formattedToAmount: currency(this.toAmount, {
+            symbol: '',
+            precision: toCurrency.precision,
+          }).format(),
           rate: this.rate,
           type: this.type,
+          createdAt: format(new Date(this.createdAt)),
+          isExchange: this.type === 'Exchanged',
         };
       },
     },
@@ -154,9 +190,22 @@ export const getPaginatedConversions = async (
 
   const total = await ConversionModel.find().countDocuments();
 
+  const firstCount = page * perPage - perPage + 1;
+  const lastCount = page * perPage > total ? total : page * perPage;
+
+  const hasPreviousPage = page > 1;
+  const hasNextPage = lastCount < total;
+
+  const paginationCountText = `${firstCount} - ${lastCount} of ${new Intl.NumberFormat().format(
+    total
+  )}`;
+
   return {
     page,
     perPage,
+    hasNextPage,
+    hasPreviousPage,
+    paginationCountText,
     total,
     sort: transfromConversionSortFields(sortings),
     data,

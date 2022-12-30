@@ -28,7 +28,7 @@ export const updateRates = async (
 
     const rates = await fetchCurrencyRates(baseCurrencyCode);
 
-    if (toCurrencyCode in rates) {
+    if (toCurrencyCode in rates && baseCurrencyCode !== toCurrencyCode) {
       const rate = rates[toCurrencyCode];
 
       const conversion = await createLivePriceConversion(
