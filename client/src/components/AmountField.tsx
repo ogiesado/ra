@@ -19,7 +19,7 @@ export const AmountField = ({
       <input
         disabled={disabled}
         type="number"
-        placeholder="0"
+        placeholder="Enter the amount"
         value={value}
         aria-label={label}
         className="p-2 border border-ra-border rounded-md appearance-none disabled:bg-slate-100 disabled:text-gray-400"

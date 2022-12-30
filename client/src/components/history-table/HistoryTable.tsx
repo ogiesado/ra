@@ -25,7 +25,7 @@ export const HistoryTable = ({
 }) => {
   return (
     <div className="w-full">
-      <div className="flex items-center bg-ra-bg-1 h-8 rounded-md">
+      <div className="hidden lg:flex items-center bg-ra-bg-1 h-8 rounded-md">
         <DataCell className="pl-2" onClick={() => onSort('createdAt')}>
           <ListBulletIcon className="h-3 w-3 mr-2" /> Date & Time
         </DataCell>
@@ -72,23 +72,32 @@ export const HistoryTable = ({
           return (
             <div
               key={id}
-              className="flex items-center odd:bg-ra-bg-1 h-14 rounded-md"
+              className="flex flex-col  bg-ra-bg-2 mb-4 p-4 lg:flex-row lg:p-0 lg:items-center lg:mb-0 lg:border-0 lg:odd:bg-ra-bg-1 lg:even:bg-white lg:h-14 border border-ra-border-2 rounded-md"
             >
-              <DataCell className="pl-2">{createdAt}</DataCell>
-              <DataCell className="pl-2" separator>
+              <div className="flex justify-between w-full lg:hidden">
+                <p className="font-semibold">
+                  {fromCurrencyName} -&gt; {toCurrency}
+                </p>
+                <span className="h-4 w-4 bg-ra-green-2 rounded-full"></span>
+              </div>
+              <p className="lg:hidden">
+                Amount {toCurrency} {formattedToAmount}
+              </p>
+              <DataCell className="hidden lg:flex pl-2">{createdAt}</DataCell>
+              <DataCell className="hidden lg:flex pl-2" separator>
                 {fromCurrencyName}
               </DataCell>
-              <DataCell className="pl-2" separator>
+              <DataCell className="hidden lg:flex pl-2" separator>
                 {formattedFromAmount}
               </DataCell>
-              <DataCell className="pl-2" separator>
+              <DataCell className="hidden lg:flex pl-2" separator>
                 {toCurrency}
               </DataCell>
-              <DataCell className="pl-2" separator>
+              <DataCell className="hidden lg:flex pl-2" separator>
                 {formattedToAmount}
               </DataCell>
               <DataCell
-                className={`pl-2 ${
+                className={`hidden lg:flex pl-2 ${
                   isExchange ? 'text-ra-purple' : 'text-ra-green'
                 }  font-semibold`}
                 separator
