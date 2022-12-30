@@ -54,9 +54,9 @@ export const useAppService = () => {
     []
   );
 
-  useEffect(() => {
-    refreshHistory();
-  }, [rates]);
+  // useEffect(() => {
+  //   refreshHistory();
+  // }, [rates]);
 
   return {
     currencies,

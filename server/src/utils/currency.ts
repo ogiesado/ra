@@ -89,7 +89,6 @@ export const makeCurrencyConverter = ({
     }
 
     if (currencyCode === fromCurrencyCode) {
-      console.log(11);
       const value = currency(amount, {
         precision: getCurrencyPrecision(toCurrencyCode),
       }).multiply(toAmount).value;
