@@ -168,7 +168,10 @@ export const getLatestLiveConversionRates = async (
   destinationCurrencyCodes: CurrencyCode[]
 ) => {
   const rates: Partial<
-    Record<`${CurrencyCode}:${CurrencyCode}`, { id: string; value: number }>
+    Record<
+      `${CurrencyCode}:${CurrencyCode}`,
+      { id: string; value: number; key: string }
+    >
   > = {};
 
   for (const fromCurrency of baseCurrencyCodes) {
@@ -184,9 +187,12 @@ export const getLatestLiveConversionRates = async (
       );
 
       if (conversion) {
+        const key = `${conversion.fromCurrency}:${conversion.toCurrency}`;
+
         rates[`${conversion.fromCurrency}:${conversion.toCurrency}`] = {
           value: conversion.rate,
           id: conversion.id,
+          key,
         };
       }
     }

@@ -12,9 +12,12 @@ export const useRatesService = (initRates: Rate = {}) => {
 
       if ('message' in data) return;
 
+      const key = `${data.fromCurrency}:${data.toCurrency}`;
+
       setRates((rates) => ({
         ...rates,
-        [`${data.fromCurrency}:${data.toCurrency}`]: {
+        [key]: {
+          key,
           id: data.id,
           value: data.rate,
         },

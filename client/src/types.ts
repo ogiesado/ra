@@ -8,31 +8,30 @@ export interface Conversion {
   type: 'Live Price' | 'Exchanged';
 }
 
-export type Rate = Partial<
-  Record<
-    | 'BTC:ETH'
-    | 'BTC:GBP'
-    | 'BTC:USD'
-    | 'ETH:BTC'
-    | 'ETH:GBP'
-    | 'ETH:USD'
-    | 'GBP:BTC'
-    | 'GBP:ETH'
-    | 'GBP:USD'
-    | 'USD:BTC'
-    | 'USD:ETH'
-    | 'USD:GBP'
-    | 'BTC:BTC'
-    | 'ETH:ETH'
-    | 'GBP:GBP'
-    | 'USD:USD',
-    RateValue
-  >
->;
+export type Rate = Partial<Record<RateKey, RateValue>>;
+
+export type RateKey =
+  | 'BTC:ETH'
+  | 'BTC:GBP'
+  | 'BTC:USD'
+  | 'ETH:BTC'
+  | 'ETH:GBP'
+  | 'ETH:USD'
+  | 'GBP:BTC'
+  | 'GBP:ETH'
+  | 'GBP:USD'
+  | 'USD:BTC'
+  | 'USD:ETH'
+  | 'USD:GBP'
+  | 'BTC:BTC'
+  | 'ETH:ETH'
+  | 'GBP:GBP'
+  | 'USD:USD';
 
 export type RateValue = {
   id: string;
   value: number;
+  key: RateKey;
 };
 
 export interface Currency {

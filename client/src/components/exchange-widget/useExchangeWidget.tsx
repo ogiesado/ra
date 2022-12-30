@@ -1,5 +1,5 @@
 import currency from 'currency.js';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useSaveConversionsService } from '../../services';
 import { Currency, Rate, RateValue } from '../../types';
 
@@ -18,10 +18,13 @@ export const useExchangeWidget = (
 
   const { saveConversion } = useSaveConversionsService();
 
-  const disableSaveButton = useMemo(
-    () => ['', '0'].includes(fromAmount) || ['', '0'].includes(toAmount),
-    [fromAmount, toAmount]
-  );
+  const disableSaveButton = useMemo(() => {
+    const inavlidAmountValues = ['', '0'];
+    return (
+      inavlidAmountValues.includes(fromAmount) ||
+      inavlidAmountValues.includes(toAmount)
+    );
+  }, [fromAmount, toAmount]);
 
   const updateFromAmount = (
     fromAmount: string,
@@ -105,6 +108,16 @@ export const useExchangeWidget = (
       setToAmount('');
     });
   };
+
+  const cacheRef = useRef({ fromAmount, fromCurrency, toCurrency });
+  cacheRef.current = { fromAmount, fromCurrency, toCurrency };
+
+  useEffect(() => {
+    if (rate) {
+      const { fromAmount, fromCurrency, toCurrency } = cacheRef.current;
+      updateFromAmount(fromAmount, fromCurrency, toCurrency);
+    }
+  }, [rates]);
 
   return {
     fromCurrency,
