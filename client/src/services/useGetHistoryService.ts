@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Conversion } from '../types';
+import { Conversion, ConversionField } from '../types';
 
 export const useGetHistoryService = () => {
   const [history, setHistory] = useState<Conversion[]>([]);
@@ -28,6 +28,7 @@ export const useGetHistoryService = () => {
       setHasPrevious(data.hasPreviousPage);
       setTotal(data.total);
       setCountText(data.paginationCountText);
+      setSort(data.sort);
     },
     []
   );
@@ -44,6 +45,24 @@ export const useGetHistoryService = () => {
     fetchConversions(page, perPage, sort);
   }, [page, perPage, sort]);
 
+  const toggleSort = useCallback(
+    (fieldName: ConversionField) => {
+      let newSort = sort;
+      const orderToggle = { desc: 'asc', asc: 'desc' };
+
+      const [field, order] = sort.split(':');
+
+      if (fieldName === field)
+        newSort = `${fieldName}:${
+          orderToggle[order as keyof typeof orderToggle]
+        }`;
+      else newSort = `${fieldName}:desc`;
+
+      if (newSort !== sort) fetchConversions(page, perPage, newSort);
+    },
+    [sort, page, perPage]
+  );
+
   useEffect(() => {
     fetchConversions();
   }, []);
@@ -59,5 +78,6 @@ export const useGetHistoryService = () => {
     previous,
     hasPrevious,
     hasHistory: history.length > 0,
+    toggleSort,
   };
 };

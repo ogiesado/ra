@@ -17,6 +17,7 @@ export const useAppService = () => {
     previous: previousHistory,
     countText: historyCountText,
     refresh: refreshHistory,
+    toggleSort: toggleHistorySorting,
   } = useGetHistoryService();
 
   const fiatCurrencies = useMemo(
@@ -66,6 +67,7 @@ export const useAppService = () => {
     hasNextHistory,
     hasPreviousHistory,
     historyCountText,
+    toggleHistorySorting,
     refreshHistory,
     nextHistory,
     previousHistory,

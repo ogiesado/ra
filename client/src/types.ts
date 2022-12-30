@@ -31,3 +31,12 @@ export interface Currency {
   code: 'BTC' | 'ETH' | 'GBP' | 'USD' | 'ETH';
   precision: number;
 }
+
+export type ConversionField =
+  | 'createdAt'
+  | 'fromCurrency'
+  | 'toCurrency'
+  | 'rate'
+  | 'type'
+  | 'toAmount'
+  | 'fromAmount';

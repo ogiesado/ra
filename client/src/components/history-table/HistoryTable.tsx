@@ -4,7 +4,7 @@ import {
   ArrowSmallRightIcon,
 } from '@heroicons/react/24/solid';
 import { ReactNode } from 'react';
-import { Conversion } from '../../types';
+import { Conversion, ConversionField } from '../../types';
 
 export const HistoryTable = ({
   data,
@@ -13,6 +13,7 @@ export const HistoryTable = ({
   paginationText,
   onNext,
   onPrevious,
+  onSort,
 }: {
   data: Conversion[];
   hasNext: boolean;
@@ -20,26 +21,39 @@ export const HistoryTable = ({
   paginationText: string;
   onNext: () => void;
   onPrevious: () => void;
+  onSort: (field: ConversionField) => void;
 }) => {
   return (
     <div className="w-full">
       <div className="flex items-center bg-ra-bg-1 h-8 rounded-md">
-        <DataCell className="pl-2">
+        <DataCell className="pl-2" onClick={() => onSort('createdAt')}>
           <ListBulletIcon className="h-3 w-3 mr-2" /> Date & Time
         </DataCell>
-        <DataCell className="pl-2" separator>
+        <DataCell
+          className="pl-2"
+          separator
+          onClick={() => onSort('fromCurrency')}
+        >
           Currency From
         </DataCell>
-        <DataCell className="pl-2" separator>
+        <DataCell
+          className="pl-2"
+          separator
+          onClick={() => onSort('fromAmount')}
+        >
           Amount 1
         </DataCell>
-        <DataCell className="pl-2" separator>
+        <DataCell
+          className="pl-2"
+          separator
+          onClick={() => onSort('toCurrency')}
+        >
           Currency To
         </DataCell>
-        <DataCell className="pl-2" separator>
+        <DataCell className="pl-2" separator onClick={() => onSort('toAmount')}>
           Amount 2
         </DataCell>
-        <DataCell className="pl-2" separator>
+        <DataCell className="pl-2" separator onClick={() => onSort('type')}>
           Type
         </DataCell>
       </div>
@@ -113,10 +127,12 @@ const DataCell = ({
   children,
   separator,
   className,
+  onClick,
 }: {
   children: ReactNode;
   separator?: boolean;
   className?: string;
+  onClick?: () => void;
 }) => {
   return (
     <div
@@ -124,7 +140,12 @@ const DataCell = ({
         separator ? 'border-l border-l-slate-200' : ''
       } ${className ?? ''} `}
     >
-      {children}
+      {onClick && (
+        <button onClick={onClick} className="flex items-center">
+          {children}
+        </button>
+      )}
+      {!onClick && children}
     </div>
   );
 };

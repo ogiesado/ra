@@ -18,6 +18,7 @@ function App() {
     refreshHistory,
     nextHistory,
     previousHistory,
+    toggleHistorySorting,
     showMessage,
   } = useAppService();
 
@@ -52,6 +53,7 @@ function App() {
             onNext={nextHistory}
             onPrevious={previousHistory}
             paginationText={historyCountText}
+            onSort={toggleHistorySorting}
           />
         )}
       </main>
