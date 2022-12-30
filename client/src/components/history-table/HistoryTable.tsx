@@ -21,8 +21,6 @@ export const HistoryTable = ({
   onNext: () => void;
   onPrevious: () => void;
 }) => {
-  console.log('hasNext', hasNext);
-  console.log('hasPrevious', hasPrevious);
   return (
     <div className="w-full">
       <div className="flex items-center bg-ra-bg-1 h-8 rounded-md">

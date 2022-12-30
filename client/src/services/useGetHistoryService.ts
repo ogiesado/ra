@@ -44,9 +44,6 @@ export const useGetHistoryService = () => {
     fetchConversions();
   }, []);
 
-  console.log('prev', hasPrevious);
-  console.log('next', hasNext);
-
   return {
     history,
     page,
