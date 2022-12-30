@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useGetHistoryService } from './useGetHistoryService';
 import { useInitService } from './useInitService';
 import { useRatesService } from './useRatesService';
@@ -53,6 +53,10 @@ export const useAppService = () => {
     },
     []
   );
+
+  useEffect(() => {
+    refreshHistory();
+  }, [rates]);
 
   return {
     currencies,

@@ -30,7 +30,6 @@ services:
     command: npm run dev
   mongo:
     image: mongo
-    container_name: ra-mongo
     restart: always
     ports:
      - 27017:27017
