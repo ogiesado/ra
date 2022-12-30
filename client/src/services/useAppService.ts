@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { useGetHistoryService } from './useGetHistoryService';
 import { useInitService } from './useInitService';
 import { useRatesService } from './useRatesService';
 
@@ -7,6 +8,15 @@ export const useAppService = () => {
   const { rates } = useRatesService(initRates);
   const [message, setMessage] = useState<string | null>(null);
   const [messageSuccess, setMessageSuccess] = useState(true);
+  const {
+    history,
+    hasHistory,
+    hasNext: hasNextHistory,
+    hasPrevious: hasPreviousHistory,
+    next: nextHistory,
+    previous: previousHistory,
+    countText: historyCountText,
+  } = useGetHistoryService();
 
   const fiatCurrencies = useMemo(
     () => currencies.filter(({ type }) => type === 'fiat'),
@@ -50,6 +60,13 @@ export const useAppService = () => {
     loading,
     message,
     messageSuccess,
+    history,
+    hasHistory,
+    hasNextHistory,
+    hasPreviousHistory,
+    historyCountText,
+    nextHistory,
+    previousHistory,
     showMessage,
   };
 };

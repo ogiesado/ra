@@ -9,6 +9,8 @@ module.exports = {
         'ra-menu-border': '#F2F2F2',
         'ra-bg-1': '#EEEEEE',
         'ra-green': '#49CD5E',
+        'ra-text-green': '#5DBE7E',
+        'ra-purple': '#6368DF',
       },
       height: {
         'ra-234-px': '234px',

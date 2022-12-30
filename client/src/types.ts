@@ -1,32 +1,23 @@
 export interface Conversion {
   id: string;
-  fromCurrency: Currency;
-  toCurrency: Currency;
+  fromCurrency: Currency['code'];
+  toCurrency: Currency['code'];
   fromAmount: number;
   toAmount: number;
   rate: number;
   type: 'Live Price' | 'Exchanged';
+
+  fromCurrencyName: string;
+  toCurrencyName: string;
+  formattedFromAmount: string;
+  formattedToAmount: string;
+  createdAt: string;
+  isExchange: boolean;
 }
 
 export type Rate = Partial<Record<RateKey, RateValue>>;
 
-export type RateKey =
-  | 'BTC:ETH'
-  | 'BTC:GBP'
-  | 'BTC:USD'
-  | 'ETH:BTC'
-  | 'ETH:GBP'
-  | 'ETH:USD'
-  | 'GBP:BTC'
-  | 'GBP:ETH'
-  | 'GBP:USD'
-  | 'USD:BTC'
-  | 'USD:ETH'
-  | 'USD:GBP'
-  | 'BTC:BTC'
-  | 'ETH:ETH'
-  | 'GBP:GBP'
-  | 'USD:USD';
+export type RateKey = `${Currency['code']}:${Currency['code']}`;
 
 export type RateValue = {
   id: string;
