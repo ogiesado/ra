@@ -4,7 +4,7 @@ import { Conversion } from '../types';
 export const useGetHistoryService = () => {
   const [history, setHistory] = useState<Conversion[]>([]);
   const [page, setPage] = useState(0);
-  const [sort, setSort] = useState('createdAt:asc');
+  const [sort, setSort] = useState('createdAt:desc');
   const [perPage] = useState(5);
   const [total, setTotal] = useState(0);
   const [hasNext, setHasNext] = useState(false);
@@ -12,7 +12,7 @@ export const useGetHistoryService = () => {
   const [countText, setCountText] = useState('');
 
   const fetchConversions = useCallback(
-    async (page = 1, perPage = 5, sort = 'createdAt:asc') => {
+    async (page = 1, perPage = 5, sort = 'createdAt:desc') => {
       setHasNext(false);
       setHasPrevious(false);
 
@@ -40,6 +40,10 @@ export const useGetHistoryService = () => {
     fetchConversions(page - 1, perPage, sort);
   }, [page, perPage, sort]);
 
+  const refresh = useCallback(() => {
+    fetchConversions(page, perPage, sort);
+  }, [page, perPage, sort]);
+
   useEffect(() => {
     fetchConversions();
   }, []);
@@ -49,6 +53,7 @@ export const useGetHistoryService = () => {
     page,
     total,
     countText,
+    refresh,
     next,
     hasNext,
     previous,

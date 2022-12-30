@@ -15,6 +15,7 @@ function App() {
     hasNextHistory,
     hasPreviousHistory,
     historyCountText,
+    refreshHistory,
     nextHistory,
     previousHistory,
     showMessage,
@@ -34,7 +35,10 @@ function App() {
             rates={rates}
             fromCurrencies={fiatCurrencies}
             toCurrencies={cryptoCurrencies}
-            onExchange={(success, message) => showMessage(message, success, 5)}
+            onExchange={(success, message) => {
+              refreshHistory();
+              showMessage(message, success, 5);
+            }}
           />
         </div>
       </header>
